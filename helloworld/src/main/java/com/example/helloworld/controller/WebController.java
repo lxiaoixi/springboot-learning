@@ -3,15 +3,13 @@ package com.example.helloworld.controller;
 import com.example.helloworld.domain.User;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequestMapping("/web")
 @RestController
 public class WebController {
 
@@ -49,13 +47,35 @@ public class WebController {
         return user;
     }
 
+    //post和get各种传参方式
+
     //使用 Url 进行传参，这种形式的传参地址栏会更加美观一些。
     //http://localhost:8080/get/neo
-    @RequestMapping(value="get/{name}",method=RequestMethod.GET)
+    @GetMapping("/get/{name}")
     public User get(@PathVariable String name){
         User user = new User();
         user.setName(name);
         return user;
+    }
+
+    //query-string 传参方式
+    @GetMapping("/world")
+    //http://localhost:8080/world?name=xiaoxi,传入参数
+    public String world(String name){
+        return "hello world,"+name;
+    }
+
+    //参数是一个类，也可以定义一个param类来接收参数，此处用User类来示范
+    @GetMapping("/worldPram")
+    public String worldPram(User user){
+        System.out.print(user.getName());
+        return "hello world,"+user.getName();
+    }
+
+    //也可以定义一个param类来接收参数,此处用User类来示范
+    @PostMapping("/postPram")
+    public String postPram(User user){
+        return "hello world,"+user.getName();
     }
 
     @RequestMapping("/saveUser")
@@ -68,4 +88,6 @@ public class WebController {
             }
         }
     }
+
+
 }
