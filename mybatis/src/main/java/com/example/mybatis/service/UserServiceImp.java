@@ -3,6 +3,7 @@ package com.example.mybatis.service;
 import com.example.mybatis.entity.UserEntity;
 import com.example.mybatis.mapper.UserMapper;
 import com.example.mybatis.param.UserParam;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,4 +54,12 @@ public class UserServiceImp implements UserService{
     public int countUsers(UserParam userParam) {
         return userMapper.getCount(userParam);
     }
+
+    @Override
+    public List<UserEntity> findUserByPage(UserParam userParam) {
+        //在需要进行分页的 MyBatis 查询方法前调用 PageHelper.startPage 静态方法即可，紧跟在这个方法后的第一个MyBatis 查询方法会被进行分页
+        PageHelper.startPage(userParam.getCurrentPage(), userParam.getPageSize());
+        return userMapper.findByPage(userParam);
+    }
+
 }

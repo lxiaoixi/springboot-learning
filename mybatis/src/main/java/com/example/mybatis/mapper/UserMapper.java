@@ -15,4 +15,5 @@ public interface UserMapper {
     List<UserEntity> getAll();
     List<UserEntity> getList(UserParam userParam);
     int getCount(UserParam userParam);
+    List<UserEntity> findByPage(UserParam userParam);
 }

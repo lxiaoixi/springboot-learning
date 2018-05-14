@@ -38,14 +38,46 @@
         FROM
           users
     </select>
-
+    <insert id="insert" parameterType="com.example.mybatis.entity.UserEntity">
+        INSERT INTO users
+        (userName, passWord, user_sex)
+        values
+        (#{userName}, #{passWord}, #{userSex})
+    </insert>
     <!--常用的增删改查-->
     <insert id="addUser" parameterType="com.example.mybatis.entity.UserEntity">
-      INSERT INTO
+        INSERT INTO
           users
-          (userName,passWord,user_sex)
-      VALUES
-          (#{userName},#{passWord},#{userSex})
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userName != null" >
+                userName,
+            </if>
+            <if test="passWord != null" >
+                passWord,
+            </if>
+            <if test="userSex != null" >
+                user_sex,
+            </if>
+            <if test="nickName != null" >
+                nick_name
+            </if>
+        </trim>
+
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userName != null" >
+                #{userName},
+            </if>
+            <if test="passWord != null" >
+                #{passWord},
+            </if>
+            <if test="userSex != null" >
+                #{userSex},
+            </if>
+            <if test="nickName != null" >
+                #{nickName}
+            </if>
+
+        </trim>
     </insert>
 
     <delete id="deleteUser" parameterType="Long">
@@ -93,5 +125,14 @@
             users
         WHERE 1=1
             <include refid="Base_Where_List" />
+    </select>
+    <!--pageHelper分页插件分页-->
+    <select id="findByPage" parameterType="com.example.mybatis.param.UserParam" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from users
+        WHERE 1=1
+        <include refid="Base_Where_List" />
+        ORDER BY id DESC
     </select>
 </mapper>
