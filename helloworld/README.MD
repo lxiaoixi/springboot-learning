@@ -19,6 +19,47 @@
 * @MapperScan      //添加对 Mapper 包扫描,自动加载包路径下的 Mapper @MapperScan("com.example.mybatis.mapper")
 
 
+### 接口
+
+* InitializingBean
+
+  实现InitializingBean的类，为bean提供了初始化方法的方式,在类加载后会调用afterPropertiesSet()方法
+* DisposableBean
+  
+  实现DisposableBean接口的类，在类销毁时，会调用destroy()方法
+  
+  ```$xslt
+    public class TestBean implements InitializingBean, DisposableBean  
+    {  
+        public void afterPropertiesSet(){  
+            //bean加载后调用  
+        }  
+          
+        public void destroy() {  
+            //bean销毁时调用  
+        }  
+    }  
+
+  ```
+  
+* CommandLineRunner
+
+    Spring Boot 启动加载数据,在项目服务启动的时候就去加载一些数据或做一些事情。
+    可使用@Order 注解来定义执行顺序。
+    ```$xslt
+    @Component
+    @Order(value=2)
+    public class MyStartupRunner1 implements CommandLineRunner {
+    
+        @Override
+        public void run(String... args) throws Exception {
+            System.out.println(">>>>>>>>>>>>>>>服务启动执行，执行加载数据等操作<<<<<<<<<<<<<");
+        }
+    
+    }
+    ```
+    
+    
 JAVA 文件相对路径和绝对路径
 单元测试 Mockmvc
 输入输出流
