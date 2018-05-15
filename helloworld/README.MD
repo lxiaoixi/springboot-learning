@@ -14,9 +14,10 @@
 * @Component       //泛指组件，当组件不好归类的时候，我们可以使用这个注解进行标注。
 * @Repository      //持久层,用于标注数据访问组件，即DAO组件
 * @Service         //业务层,用于标注业务层组件,Service层
-* @Configuration
-* @Bean
+* @Configuration   
+* @Bean            //将类的生命周期交给spring,可以用在方法上面，在项目中直接注入该方法
 * @MapperScan      //添加对 Mapper 包扫描,自动加载包路径下的 Mapper @MapperScan("com.example.mybatis.mapper")
+
 
 JAVA 文件相对路径和绝对路径
 单元测试 Mockmvc
