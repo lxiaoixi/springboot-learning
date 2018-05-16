@@ -14,7 +14,7 @@
 * @Component       //泛指组件，当组件不好归类的时候，我们可以使用这个注解进行标注。
 * @Repository      //持久层,用于标注数据访问组件，即DAO组件
 * @Service         //业务层,用于标注业务层组件,Service层
-* @Configuration   
+* @Configuration   //一般这里面会定义Bean，会把这个类中bean加载到spring容器中
 * @Bean            //将类的生命周期交给spring,可以用在方法上面，在项目中直接注入该方法
 * @MapperScan      //添加对 Mapper 包扫描,自动加载包路径下的 Mapper @MapperScan("com.example.mybatis.mapper")
 
@@ -45,7 +45,7 @@
 * CommandLineRunner
 
     Spring Boot 启动加载数据,在项目服务启动的时候就去加载一些数据或做一些事情。
-    可使用@Order 注解来定义执行顺序。
+    可使用@Order 注解来定义执行顺序。@Order 注解的执行优先级是按value值从小到大顺序
     ```$xslt
     @Component
     @Order(value=2)
