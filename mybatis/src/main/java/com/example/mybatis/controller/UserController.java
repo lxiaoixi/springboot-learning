@@ -7,8 +7,11 @@ import com.example.mybatis.service.UserService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,6 +30,17 @@ public class UserController {
         String data = userService.saveUser(userEntity);
         System.out.print(data);
         return data;
+    }
+    //参数校验
+    @PostMapping("/saveUser")
+    public void saveUser(@Valid UserEntity userEntity, BindingResult result) {
+        System.out.println("user:"+userEntity);
+        if(result.hasErrors()) {
+            List<ObjectError> list = result.getAllErrors();
+            for (ObjectError error : list) {
+                System.out.println(error.getCode() + "-" + error.getDefaultMessage());
+            }
+        }
     }
 
     @PostMapping("/delete")

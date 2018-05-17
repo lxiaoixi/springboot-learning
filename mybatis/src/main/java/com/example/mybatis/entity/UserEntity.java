@@ -4,10 +4,13 @@ import com.example.mybatis.enums.UserSexEnum;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import javax.validation.constraints.NotEmpty;
+
 @Data
 public class UserEntity {
     private static final long serialVersionUID = 1L;
     private Long id;
+    @NotEmpty(message = "姓名不能为空")
     private String userName;
     private String passWord;
     private String nickName;
