@@ -30,4 +30,28 @@
   https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/HowToUse.md
   https://github.com/pagehelper/pagehelper-spring-boot
 
+# 使用 POI 实现 Microsoft Office 格式档案读和写的功能
+
+##主要实现Excel的导出
+
+* https://www.jianshu.com/p/34514b188014
+* https://www.jianshu.com/p/1bfdd92bd385
+* https://www.yiibai.com/apache_poi/apache_poi_formula.html
+
+## 引入maven依赖
+```
+    <dependency>
+          <groupId>org.apache.poi</groupId>
+          <artifactId>poi</artifactId>
+          <version>3.17</version>
+    </dependency>
+    若要导出.xlsx后缀的excel文件，必须引入该依赖
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+      <version>3.17</version>
+    </dependency>
+```
+
+## 使用http response 实现excel文件的下载
     

@@ -1,9 +1,12 @@
 package com.example.mybatis.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.mybatis.entity.UserEntity;
 import com.example.mybatis.param.UserParam;
 import com.example.mybatis.result.Page;
 import com.example.mybatis.service.UserService;
+import com.example.mybatis.util.ExcelUtil;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,8 +14,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -50,6 +58,7 @@ public class UserController {
 
     @PostMapping("/update")
     public String updateUser(UserEntity userEntity){
+        System.out.println(userEntity.getUserName());
         return userService.updateUserById(userEntity);
     }
 
@@ -81,6 +90,69 @@ public class UserController {
         List<UserEntity> userList = userService.findUserByPage(userParam);
         //分页的包装类PageInfo,用PageInfo对结果进行包装
         return new PageInfo(userList);
+    }
+
+    @GetMapping(value = "/excel/report")
+    public String getDetailReport(HttpServletResponse response) {
+        Map<String, Object> item = new HashMap<>();
+        item.put("dateStr", "2018-05-25");
+        item.put("testingItemCost", 10000);
+        item.put("orderPlaceCount", 100);
+        item.put("rate", 10);
+        item.put("name", "订单1");
+        item.put("createTime", 1527234924000l);
+        Map<String, Object> item1 = new HashMap<>();
+        item1.put("dateStr", "2018-05-26");
+        item1.put("testingItemCost", 12000);
+        item1.put("orderPlaceCount", 90);
+        item1.put("rate", 20);
+        item1.put("name", "订单2");
+        item1.put("createTime", 1527234924000l);
+        List<Object> list1 = new ArrayList<>();
+
+        list1.add(item);
+        list1.add(item1);
+
+        Map<String, Object> sum = new HashMap<>();
+        sum.put("testingItemCost", 22000);
+        sum.put("orderPlaceCount", 190);
+        Map<String, Object> map = new HashMap<>();
+        map.put("list", list1);
+        map.put("sum", sum);
+        String str = JSON.toJSONString(map);
+        JSONObject jsonObject = JSONObject.parseObject(str);
+        try {
+            String filename = "ceshi2.xlsx";
+            ExcelUtil.exportExcel(jsonObject, "reportsBusinessYearDetail.xlsx", response, filename);
+            return "success";
+        } catch (Exception e) {
+            return "failed";
+        }
+    }
+
+    @GetMapping(value = "/excel/merge")
+    public String getIncomeDetailReport(HttpServletResponse response) {
+
+        try {
+            //获取classpath 文件的输入流
+            InputStream fileInputStream =
+                    UserController.class.getClassLoader().getResourceAsStream("config/mergeCell.json");
+
+            byte[] bytes = new byte[0];
+            bytes = new byte[fileInputStream.available()];
+            fileInputStream.read(bytes);
+            String str = new String(bytes);
+            JSONObject jsonObject = JSON.parseObject(str);
+
+            //此处可能是因为数据源是通过从文件du读取获得的，导致excel表数据丢失，合并单元格不成功
+            //从数据库获取可以
+            String filename = "ceshi.xlsx";
+            ExcelUtil.exportExcel(jsonObject, "incomeDetail.xlsx", response, filename);
+            return "success";
+
+        } catch (Exception e) {
+            return "failed";
+        }
     }
 
 
