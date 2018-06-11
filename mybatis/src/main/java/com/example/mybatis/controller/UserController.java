@@ -144,10 +144,8 @@ public class UserController {
             String str = new String(bytes);
             JSONObject jsonObject = JSON.parseObject(str);
 
-            //此处可能是因为数据源是通过从文件du读取获得的，导致excel表数据丢失，合并单元格不成功
-            //从数据库获取可以
             String filename = "ceshi.xlsx";
-            ExcelUtil.exportExcel(jsonObject, "incomeDetail.xlsx", response, filename);
+            ExcelUtil.mergeExcel(jsonObject, "incomeDetail.xlsx", response, filename);
             return "success";
 
         } catch (Exception e) {
