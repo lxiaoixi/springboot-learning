@@ -3,7 +3,7 @@
 <!--指明该映射文件对应的 Mapper 类文件地址：-->
 <mapper namespace="com.example.mybatis.mapper.UserMapper">
     <!--配置表结构和类的对应关系：-->
-    <resultMap id="BaseResultMap" type="com.example.mybatis.entity.UserEntity" >
+    <resultMap id="BaseResultMap" type="UserEntity" >
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="userName" property="userName" jdbcType="VARCHAR" />
         <result column="passWord" property="passWord" jdbcType="VARCHAR" />
@@ -38,14 +38,14 @@
         FROM
           users
     </select>
-    <insert id="insert" parameterType="com.example.mybatis.entity.UserEntity">
+    <insert id="insert" parameterType="UserEntity">
         INSERT INTO users
         (userName, passWord, user_sex)
         values
         (#{userName}, #{passWord}, #{userSex})
     </insert>
     <!--常用的增删改查-->
-    <insert id="addUser" parameterType="com.example.mybatis.entity.UserEntity">
+    <insert id="addUser" parameterType="UserEntity">
         INSERT INTO
           users
         <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -87,7 +87,7 @@
             id=#{id}
     </delete>
 
-    <update id="updateUser" parameterType="com.example.mybatis.entity.UserEntity">
+    <update id="updateUser" parameterType="UserEntity">
         UPDATE
             users
         SET
@@ -108,7 +108,7 @@
             id=#{id}
     </select>
     <!--分页-->
-    <select id="getList" parameterType="com.example.mybatis.param.UserParam" resultMap="BaseResultMap">
+    <select id="getList" parameterType="UserParam" resultMap="BaseResultMap">
         SELECT
             <include refid="Base_Column_List" />
         FROM
@@ -118,7 +118,7 @@
         ORDER BY id ASC
         limit #{beginLine}, #{pageSize}
     </select>
-    <select id="getCount" parameterType="com.example.mybatis.param.UserParam" resultType="Integer">
+    <select id="getCount" parameterType="UserParam" resultType="Integer">
         SELECT
             COUNT(1)
         FROM
@@ -127,7 +127,7 @@
             <include refid="Base_Where_List" />
     </select>
     <!--pageHelper分页插件分页-->
-    <select id="findByPage" parameterType="com.example.mybatis.param.UserParam" resultMap="BaseResultMap">
+    <select id="findByPage" parameterType="UserParam" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from users

@@ -101,6 +101,7 @@ public class UserController {
         item.put("rate", 10);
         item.put("name", "订单1");
         item.put("createTime", 1527234924000l);
+        item.put("url","https://www.baidu.com");
         Map<String, Object> item1 = new HashMap<>();
         item1.put("dateStr", "2018-05-26");
         item1.put("testingItemCost", 12000);
@@ -108,6 +109,7 @@ public class UserController {
         item1.put("rate", 20);
         item1.put("name", "订单2");
         item1.put("createTime", 1527234924000l);
+        item1.put("url","https://www.baidu.com");
         List<Object> list1 = new ArrayList<>();
 
         list1.add(item);

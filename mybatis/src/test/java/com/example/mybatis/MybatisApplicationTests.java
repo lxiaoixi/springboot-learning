@@ -11,6 +11,8 @@ public class MybatisApplicationTests {
 
     @Test
     public void contextLoads() {
+        //List<UserEntity> users = Arrays.asList(new UserEntity(20), new UserEntity(35), new UserEntity(20));
+
     }
 
 }

@@ -10,11 +10,12 @@ import javax.validation.constraints.NotEmpty;
 public class UserEntity {
     private static final long serialVersionUID = 1L;
     private Long id;
-    @NotEmpty(message = "姓名不能为空")
+    @NotEmpty(message = "{user.name.notBlank}")
     private String userName;
     private String passWord;
     private String nickName;
     private UserSexEnum userSex;
+    private int age;
 
     @Override
     public String toString() {

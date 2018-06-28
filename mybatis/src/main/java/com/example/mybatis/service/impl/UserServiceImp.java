@@ -1,8 +1,9 @@
-package com.example.mybatis.service;
+package com.example.mybatis.service.impl;
 
 import com.example.mybatis.entity.UserEntity;
 import com.example.mybatis.mapper.UserMapper;
 import com.example.mybatis.param.UserParam;
+import com.example.mybatis.service.UserService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserServiceImp implements UserService{
+public class UserServiceImp implements UserService {
 
     @Autowired
     private UserMapper userMapper;
