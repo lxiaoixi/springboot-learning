@@ -6,12 +6,16 @@ import com.example.mybatis.param.UserParam;
 import com.example.mybatis.service.UserService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class UserServiceImp implements UserService {
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Autowired
     private UserMapper userMapper;
@@ -63,4 +67,12 @@ public class UserServiceImp implements UserService {
         return userMapper.findByPage(userParam);
     }
 
+    @Override
+    public String ceshi() {
+        ValueOperations<String, String> operations=redisTemplate.opsForValue();
+        operations.set("ceshi", "ceshi");
+        String ceshi =operations.get("ceshi");
+        System.out.println("user: "+ceshi);
+        return "ceshi";
+    }
 }

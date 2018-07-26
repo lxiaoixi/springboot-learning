@@ -23,10 +23,11 @@ public class MyBatisConfig {
     public MyBatisConfig(Environment env) {
         this.env = env;
     }
-
     @Bean
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource)
             throws Exception {
         return myBatisConfigUtil.sqlSessionFactory(dataSource,env,logger);
     }
+
+
 }

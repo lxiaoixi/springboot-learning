@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--指明该映射文件对应的 Mapper 类文件地址：-->
+<mapper namespace="com.example.mybatis.shiro.mapper.AuthTokenMapper">
+    <insert id="addToken" parameterType="AuthTokenEntity">
+        INSERT INTO auth_token
+        (id,userId,createAt,updateAt)
+        VALUES
+        (#{id},#{userId},unix_timestamp(now())*1000,unix_timestamp(now())*1000)
+    </insert>
+    <select id="findTokenByTokenId" parameterType="String" resultType="AuthTokenEntity">
+        SELECT * FROM auth_token
+        WHERE id=#{id}
+    </select>
+
+</mapper>

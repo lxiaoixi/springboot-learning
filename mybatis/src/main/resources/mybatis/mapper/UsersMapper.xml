@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--指明该映射文件对应的 Mapper 类文件地址：-->
+<mapper namespace="com.example.mybatis.shiro.mapper.UsersMapper">
+    <sql id="Base_Column_List" >
+        id, username, phoneNumber,email,nickname,age
+    </sql>
+    <sql id="Base_Where_List">
+        <if test="username != null  and username != ''">
+            and username = #{username}
+        </if>
+        <if test="email != null and email != ''">
+            and email = #{email}
+        </if>
+    </sql>
+    <insert id="addUser" parameterType="UsersParam">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        INSERT INTO user
+        (username,phoneNumber,email,nickname,age,password,salt,createAt,updateAt)
+        VALUES
+        (#{username},#{phoneNumber},#{email},#{nickname},#{age},#{password},#{salt},unix_timestamp(now())*1000,unix_timestamp(now())*1000)
+    </insert>
+
+    <delete id="deleteUserById" parameterType="Long">
+        DELETE FROM user
+        WHERE
+          id=#{id}
+    </delete>
+
+    <update id="updateUser" parameterType="UsersParam">
+        UPDATE
+        user
+        SET
+        <if test="username != null">username = #{username},</if>
+        <if test="email != null">email = #{email},</if>
+        nickname = #{nickname},
+        phoneNumber = #{phoneNumber},
+        age = #{age},
+        updateAt=unix_timestamp(now())*1000
+        WHERE
+        id =#{id}
+    </update>
+
+    <select id="findUserByEmail" parameterType="String" resultType="UsersEntity">
+        SELECT
+          *
+        FROM
+          user
+        WHERE
+          email=#{email}
+    </select>
+
+    <select id="findUsersByPage" parameterType="UsersParam" resultType="UsersEntity">
+        SELECT
+          <include refid="Base_Column_List" />
+        FROM
+          user
+        WHERE 1=1
+          <include refid="Base_Where_List" />
+    </select>
+
+    <resultMap id="userRolePermissionResultMap" type="UserRolePermissionDto">
+        <id column="id" property="id"/>
+        <result column="phoneNumber" property="phoneNumber"/>
+        <result column="username" property="username"/>
+        <result column="email" property="email"/>
+        <result column="nickname" property="nickname"/>
+        <result column="updateAt" property="updateAt"/>
+        <result column="createAt" property="createAt"/>
+        <collection property="roles" ofType="RolePermissionDto">
+            <id column="roleId" property="id"/>
+            <result column="roleName" property="name"/>
+            <result column="roleLabel" property="label"/>
+            <collection property="permissions" ofType="PermissionEntity">
+                <id column="permissionId" property="id"/>
+                <result column="permissionName" property="name"/>
+                <result column="permissionLabel" property="label"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="findUserRolePermissionById" parameterType="Long" resultMap="userRolePermissionResultMap">
+        SELECT
+            `user`.*,
+            permission.id permissionId,
+            permission.name permissionName,
+            permission.label permissionLabel,
+            role.id roleId,
+            role.name roleName,
+            role.label roleLabel
+        FROM
+          `user`
+        LEFT JOIN `user_role` ON `user`.id = `user_role`.userId
+        LEFT JOIN `role` ON `role`.id = `user_role`.roleId
+        LEFT JOIN `role_permission` ON `role`.id = `role_permission`.roleId
+        LEFT JOIN `permission` ON `permission`.id = `role_permission`.permissionId
+        WHERE
+	    `user`.id = #{id}
+    </select>
+
+</mapper>

@@ -14,4 +14,5 @@ public interface UserService {
     List<UserEntity> userListByPage(UserParam userParam);
     int countUsers(UserParam userParam);
     List<UserEntity> findUserByPage(UserParam userParam);
+    String ceshi();
 }

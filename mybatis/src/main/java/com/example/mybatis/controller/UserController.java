@@ -3,6 +3,7 @@ package com.example.mybatis.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.mybatis.entity.UserEntity;
+import com.example.mybatis.enums.UserSexEnum;
 import com.example.mybatis.param.UserParam;
 import com.example.mybatis.result.Page;
 import com.example.mybatis.service.UserService;
@@ -10,8 +11,7 @@ import com.example.mybatis.util.ExcelUtil;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/user")
+//@RequestMapping("/user")
 public class UserController {
 
     //@Value获取application.properties配置中的属性
@@ -40,29 +40,24 @@ public class UserController {
         return data;
     }
     //参数校验
-    @PostMapping("/saveUser")
-    public void saveUser(@Valid UserEntity userEntity, BindingResult result) {
+    @PostMapping("/user")
+    public void saveUser1(@Valid UserEntity userEntity) {
         System.out.println("user:"+userEntity);
-        if(result.hasErrors()) {
-            List<ObjectError> list = result.getAllErrors();
-            for (ObjectError error : list) {
-                System.out.println(error.getCode() + "-" + error.getDefaultMessage());
-            }
-        }
+
     }
 
-    @PostMapping("/delete")
+    @DeleteMapping("/user")
     public String deleteUser(Long id){
         return userService.deleteUserById(id);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/user")
     public String updateUser(UserEntity userEntity){
         System.out.println(userEntity.getUserName());
         return userService.updateUserById(userEntity);
     }
 
-    @GetMapping("/search/{id}")
+    @GetMapping("/user/{id}")
     public UserEntity findUserById(@PathVariable Long id){
         UserEntity userEntity = userService.findUserById(id);
         System.out.print(userEntity.getUserSex());
@@ -70,13 +65,15 @@ public class UserController {
         return userEntity;
     }
 
-    @GetMapping("/search/users")
+    @GetMapping("/user")
+//    @Cacheable(value="user")
     public List<UserEntity> findAllUsers(){
         System.out.print(myname);
-        return userService.getUserList();
+        List<UserEntity> user = userService.getUserList();
+        return user;
     }
 
-    @GetMapping("/search/pages/users")
+    @GetMapping("/user/page")
     public Page<UserEntity> searchUserByPage(UserParam userParam){
         List<UserEntity> users =  userService.userListByPage(userParam);
         int sum = userService.countUsers(userParam);
@@ -85,7 +82,7 @@ public class UserController {
         return page;
     }
 
-    @GetMapping("/page/help/search")
+    @GetMapping("/user/page/help/search")
     public PageInfo<UserEntity> getAll(UserParam userParam) {
         List<UserEntity> userList = userService.findUserByPage(userParam);
         //分页的包装类PageInfo,用PageInfo对结果进行包装
@@ -153,6 +150,19 @@ public class UserController {
         } catch (Exception e) {
             return "failed";
         }
+    }
+
+    @GetMapping("/ceshi")
+    @Cacheable(value="helloCache",condition="#name.length() <= 4")
+    public UserEntity ceshi(String name){
+        System.out.println("没有走缓存！");
+        UserEntity user = new UserEntity();
+        user.setUserName("xiaoxi");
+        user.setPassWord("123456");
+        user.setNickName("xing");
+        user.setUserSex(UserSexEnum.MAN);
+        user.setAge(10);
+        return user;
     }
 
 

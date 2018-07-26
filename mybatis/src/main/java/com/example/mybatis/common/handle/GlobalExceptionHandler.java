@@ -2,6 +2,8 @@ package com.example.mybatis.common.handle;
 
 import com.example.mybatis.common.exception.ParamsInvalidException;
 import com.example.mybatis.common.response.ErrorResponse;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -32,18 +34,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<Object>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-//    @ExceptionHandler(AuthenticationException.class)
-//    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-//    public ResponseEntity handleShiroAuthentication() {
-//        ErrorResponse errorResponse = new ErrorResponse(1002, "未授权");
-//        return new ResponseEntity<Object>(errorResponse, HttpStatus.BAD_REQUEST);
-//    }
-//    @ExceptionHandler(AuthorizationException.class)
-//    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-//    public ResponseEntity handleShiroUnAuthorized() {
-//        ErrorResponse errorResponse = new ErrorResponse(1002, "未授权");
-//        return new ResponseEntity<Object>(errorResponse, HttpStatus.BAD_REQUEST);
-//    }
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity handleShiroAuthentication() {
+        ErrorResponse errorResponse = new ErrorResponse(1002, "未授权");
+        return new ResponseEntity<Object>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(AuthorizationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity handleShiroUnAuthorized() {
+        ErrorResponse errorResponse = new ErrorResponse(1002, "未授权");
+        return new ResponseEntity<Object>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -80,7 +82,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(code, field + error);
         return new ResponseEntity<Object>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-    
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
@@ -88,7 +90,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(1003,"请求body格式错误");
         return new ResponseEntity<Object>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-
+    //自定义类异常捕获
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ParamsInvalidException.class)
     public ResponseEntity handleCommonException(ParamsInvalidException e) {
